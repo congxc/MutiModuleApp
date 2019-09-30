@@ -1,0 +1,49 @@
+if (isLibrary) {
+    apply plugin: 'com.android.library'
+} else {
+    apply plugin: 'com.android.application'
+}
+android {
+    def sdk = rootProject.ext.sdk
+    compileSdkVersion sdk.compileSdkVersion
+    defaultConfig {
+        if(!isLibrary){
+            applicationId "com.shieh.modulenotifications"
+        }
+        minSdkVersion sdk.minSdkVersion
+        targetSdkVersion sdk.targetSdkVersion
+        def versions = rootProject.ext.versions
+        versionCode versions.versionCode
+        versionName versions.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+    implementation project(deps.project['moduleRouter'])
+    annotationProcessor deps.arouter_compiler
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation deps.appcompat
+    implementation deps.material
+    implementation deps.constraintlayout
+    implementation deps.lifecycle_extensions
+
+    testImplementation deps.junit
+    androidTestImplementation deps.test_runner
+    androidTestImplementation deps.test_espresso
+}
+

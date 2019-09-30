@@ -1,0 +1,3 @@
+include ':app', ':moduleCore:modulehome', ':moduleCore:moduledashboard',
+        ':moduleCore:modulenotifications', ':moduleSystem:modulebase',
+        ':modulePublic:modulearouter'

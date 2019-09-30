@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+android {
+    def sdk = rootProject.ext.sdk
+    compileSdkVersion sdk.compileSdkVersion
+    defaultConfig {
+        applicationId "com.shieh.mutilmoduleapp"
+        minSdkVersion sdk.minSdkVersion
+        targetSdkVersion sdk.targetSdkVersion
+        def versions = rootProject.ext.versions
+        versionCode versions.versionCode
+        versionName versions.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation project(deps.project['modulebase'])
+    implementation project(deps.project['modulehome'])
+    implementation project(deps.project['moduledashboard'])
+    implementation project(deps.project['modulenotifications'])
+    implementation project(deps.project['moduleRouter'])
+    annotationProcessor deps.arouter_compiler
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation deps.appcompat
+    implementation deps.material
+    implementation deps.constraintlayout
+    implementation deps.navigation_fragment
+    implementation deps.navigation_ui
+
+    testImplementation deps.junit
+    androidTestImplementation deps.test_runner
+    androidTestImplementation deps.test_espresso
+}
